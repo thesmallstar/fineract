@@ -33,6 +33,8 @@ import org.apache.fineract.infrastructure.core.data.EnumOptionData;
 import org.apache.fineract.portfolio.calendar.domain.CalendarWeekDaysType;
 import org.apache.fineract.portfolio.calendar.service.CalendarEnumerations;
 import org.apache.fineract.portfolio.common.domain.PeriodFrequencyType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -44,7 +46,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class SmsCampaignDropdownReadPlatformServiceImpl implements SmsCampaignDropdownReadPlatformService {
-
+    private final static Logger LOG = LoggerFactory.getLogger(SmsCampaignDropdownReadPlatformServiceImpl.class);
     private final RestTemplate restTemplate;
 
     private final SmsConfigUtils smsConfigUtils ;
@@ -81,6 +83,9 @@ public class SmsCampaignDropdownReadPlatformServiceImpl implements SmsCampaignDr
             if (!responseOne.getStatusCode().equals(HttpStatus.OK)) {
             }
         } catch (Exception e) {
+            //Developer was too lazy to figure out whwat can go wrong?
+            //Will be covered in IllegalCatch catch which removes use of Exception most general class.
+            LOG.error("Problem occurred in retrieveSmsProviders function",e);
         }
         return smsProviderOptions;
     }

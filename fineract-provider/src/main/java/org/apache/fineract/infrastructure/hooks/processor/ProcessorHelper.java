@@ -19,6 +19,8 @@
 package org.apache.fineract.infrastructure.hooks.processor;
 
 import com.squareup.okhttp.OkHttpClient;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -65,8 +67,20 @@ public class ProcessorHelper {
         try {
             ctx = SSLContext.getInstance("TLS");
             ctx.init(null, certs, new SecureRandom());
-        } catch (final java.security.GeneralSecurityException ex) {
-        }
+        } catch (KeyManagementException ex) {
+            //Is also a part of java java.security.GeneralSecurityException but Seperated to give a more detailed
+            //Explanantion, can occur by line 2 of try block
+            //This occurs when there is a problem with the key provided in our case
+            //First argument is null and wont cause any problem
+            //Second argument is not manually generated and hence won't case a problem
+            //There is no change needed, we will probably never end up here in our use case
+            logger.error("Problem occurred in configureClient function",ex);
+        } catch (NoSuchAlgorithmException e) {
+            //Can occur by line 1
+            //Should never occur in our case since we have HardCoded TLS
+            //I have used the error message from Doc since I don't Know what exactly this would mean
+            logger.error("No Provider supports a TrustManagerFactorySpi implementation for the specified protocol.", e);
+            }
 
         try {
             final HostnameVerifier hostnameVerifier = new HostnameVerifier() {
@@ -79,6 +93,13 @@ public class ProcessorHelper {
             client.setHostnameVerifier(hostnameVerifier);
             client.setSslSocketFactory(ctx.getSocketFactory());
         } catch (final Exception e) {
+            //The above code throws no exception except "llegalStateException "
+            //It is thrown when init is not called on ctx which is not our case(we called it)
+            //Was this just added for safety? Should I remove this?
+            //Anyways we would need to solve this while adding IllegalCatch check
+            //which donot support use of "Exception" class in it's most general form
+            //So we can skip this for now
+            logger.error("Problem occurred in configureClient function",e);
         }
 
         return client;

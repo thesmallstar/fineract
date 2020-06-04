@@ -35,10 +35,10 @@
         <property name="format" value="\s+$"/>
         <property name="message" value="Line has trailing spaces."/>
     </module>
-    <module name="RegexpMultiline">
+    <!-- <module name="RegexpMultiline">
         <property name="format" value="(?s:\r\n.*)"/>
         <property name="message" value="File has Windows (CR+LF) instead of UNIX (LF) end of line (EOL) delimiters."/>
-    </module>
+    </module> -->
     <module name="SuppressWarningsFilter"/>
 <!-- TODO Enable maximum line length check:
     <module name="LineLength">
@@ -101,6 +101,10 @@
             <property name="message" value="Avoid using corresponding octal or Unicode escape."/>
         </module>
           <module name="OneTopLevelClass"/>
+        <module name="EmptyCatchBlock">
+            <property name="exceptionVariableName" value="expected|ignore"/>
+        </module>
+          
 <!-- TODO Enable many more checks (go about this one by one, step by step, raise separate PRs fixing and then enforcing):
 
         <module name="HiddenField">

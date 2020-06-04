@@ -33,6 +33,8 @@ import org.apache.fineract.organisation.teller.service.TellerManagementReadPlatf
 import org.apache.fineract.useradministration.domain.AppUser;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -40,7 +42,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CashierTransactionDataValidator {
-
+    private final static Logger logger = LoggerFactory.getLogger(CashierTransactionDataValidator.class);
     private final TellerManagementReadPlatformService tellerManagementReadPlatformService;
     private final JdbcTemplate jdbcTemplate;
 
@@ -145,7 +147,11 @@ public class CashierTransactionDataValidator {
                 validateSettleCashAndCashOutTransactions(cashierId,
                         currencyCode, transactionAmount);
             } catch (EmptyResultDataAccessException e) {
-
+                //We would never end up here
+                //We are asking for cashier Id of a Cashier who has staff Id xyz
+                //Staff ID is required while creation of cashier and we are bound to have such cashier in ideal case?
+                //NEEDS A SECOND LOOK NOT FINAL.
+                logger.error("Problem occurred in applicationIsRunningOnLocalMachine function",e);
             }
         }
 

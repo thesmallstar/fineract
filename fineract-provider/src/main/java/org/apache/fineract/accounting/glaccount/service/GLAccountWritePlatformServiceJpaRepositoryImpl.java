@@ -184,6 +184,9 @@ public class GLAccountWritePlatformServiceJpaRepositoryImpl implements GLAccount
                 throw new GLAccountDisableException();
             }
         } catch (EmptyResultDataAccessException e) {
+            // EmptyResultDataAccessException is thrown when more than one row is returned by queryForObject()
+            // count(*) Enforces the return of a single row and hence we should never arrive in this catch block
+            logger.error("Problem encountered in validateForAttachedProduct()",e);
         }
     }
 

@@ -32,6 +32,8 @@ import org.apache.fineract.infrastructure.core.service.Page;
 import org.apache.fineract.infrastructure.core.service.PaginationHelper;
 import org.apache.fineract.infrastructure.core.service.RoutingDataSource;
 import org.apache.fineract.infrastructure.core.service.SearchParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -40,7 +42,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProvisioningEntriesReadPlatformServiceImpl implements ProvisioningEntriesReadPlatformService {
-
+    private final static Logger LOG = LoggerFactory.getLogger(ProvisioningEntriesReadPlatformServiceImpl.class);
     private final JdbcTemplate jdbcTemplate;
 
     private final PaginationHelper<LoanProductProvisioningEntryData> loanProductProvisioningEntryDataPaginationHelper = new PaginationHelper<>();
@@ -245,7 +247,9 @@ public class ProvisioningEntriesReadPlatformServiceImpl implements ProvisioningE
         try {
             data = this.jdbcTemplate.queryForObject(sql1, mapper1, new Object[] {date});
         } catch (EmptyResultDataAccessException e) {
-
+            // EmptyResultDataAccessException is thrown when more than one row is returned by queryForObject()
+            // count(*) Enforces the return of a single row and hence we should never arrive in this catch block
+            LOG.error("Problem occurred in ProvisioningEntryData function",e);
         }
 
         return data;
