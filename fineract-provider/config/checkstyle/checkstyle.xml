@@ -56,6 +56,11 @@
             <property name="ignoreComments" value="false" />
         </module>
         <module name="EqualsHashCode"/>
+         <module name="ClassTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern"
+             value="Class type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
         <module name="FallThrough"/>
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
@@ -194,17 +199,6 @@
             <message key="name.invalidPattern"
              value="Local variable name ''{0}'' must match pattern ''{1}''."/>
         </module>
-        <module name="ClassTypeParameterName">
-            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
-            <message key="name.invalidPattern"
-             value="Class type name ''{0}'' must match pattern ''{1}''."/>
-        </module>
-        <module name="MethodName">
-            <property name="format" value="^[a-z][a-zA-Z0-9_]*$"/>
-            <message key="name.invalidPattern"
-             value="Method name ''{0}'' must match pattern ''{1}''."/>
-        </module>
-    
         <module name="ConstantName" />
         <module name="NoFinalizer"/>
         <module name="GenericWhitespace">
