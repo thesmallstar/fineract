@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Arrays;
 import java.util.Collection;
@@ -89,10 +90,11 @@ public class AuditsApiResource {
     @GET
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @Operation(summary = "List Audits", description = "Get a 200 list of audits that match the criteria supplied and sorted by audit id in descending order, and are within the requestors' data scope. Also it supports pagination and sorting\n"
-            + "\n" + "Example Requests:\n" + "\n" + "audits\n" + "\n" + "audits?fields=madeOnDate,maker,processingResult\n" + "\n"
-            + "audits?makerDateTimeFrom=2013-03-25 08:00:00&makerDateTimeTo=2013-04-04 18:00:00\n" + "\n" + "audits?officeId=1\n" + "\n"
-            + "audits?officeId=1&includeJson=true")
+    @Operation(security = {
+            @SecurityRequirement(name = "basicAuth") }, summary = "List Audits", description = "Get a 200 list of audits that match the criteria supplied and sorted by audit id in descending order, and are within the requestors' data scope. Also it supports pagination and sorting\n"
+                    + "\n" + "Example Requests:\n" + "\n" + "audits\n" + "\n" + "audits?fields=madeOnDate,maker,processingResult\n" + "\n"
+                    + "audits?makerDateTimeFrom=2013-03-25 08:00:00&makerDateTimeTo=2013-04-04 18:00:00\n" + "\n" + "audits?officeId=1\n"
+                    + "\n" + "audits?officeId=1&includeJson=true")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "", content = @Content(array = @ArraySchema(schema = @Schema(implementation = MakercheckersApiResourceSwagger.GetMakerCheckerResponse.class)))) })
     public String retrieveAuditEntries(@Context final UriInfo uriInfo,
@@ -140,8 +142,9 @@ public class AuditsApiResource {
     @Path("{auditId}")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @Operation(summary = "Retrieve an Audit Entry", description = "Example Requests:\n" + "\n" + "audits/20\n"
-            + "audits/20?fields=madeOnDate,maker,processingResult")
+    @Operation(security = {
+            @SecurityRequirement(name = "basicAuth") }, summary = "Retrieve an Audit Entry", description = "Example Requests:\n" + "\n"
+                    + "audits/20\n" + "audits/20?fields=madeOnDate,maker,processingResult")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "", content = @Content(schema = @Schema(implementation = MakercheckersApiResourceSwagger.GetMakerCheckerResponse.class))) })
     public String retrieveAuditEntry(@PathParam("auditId") @Parameter(description = "auditId") final Long auditId,
@@ -159,8 +162,9 @@ public class AuditsApiResource {
     @Path("/searchtemplate")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @Operation(summary = "Audit Search Template", description = "This is a convenience resource. It can be useful when building an Audit Search UI. \"appUsers\" are data scoped to the office/branch the requestor is associated with.\n"
-            + "\n" + "Example Requests:\n" + "\n" + "audits/searchtemplate\n" + "audits/searchtemplate?fields=actionNames")
+    @Operation(security = {
+            @SecurityRequirement(name = "basicAuth") }, summary = "Audit Search Template", description = "This is a convenience resource. It can be useful when building an Audit Search UI. \"appUsers\" are data scoped to the office/branch the requestor is associated with.\n"
+                    + "\n" + "Example Requests:\n" + "\n" + "audits/searchtemplate\n" + "audits/searchtemplate?fields=actionNames")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "", content = @Content(schema = @Schema(implementation = MakercheckersApiResourceSwagger.GetMakerCheckersSearchTemplateResponse.class))) })
     public String retrieveAuditSearchTemplate(@Context final UriInfo uriInfo) {
